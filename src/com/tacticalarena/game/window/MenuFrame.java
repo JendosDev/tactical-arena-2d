@@ -1,22 +1,30 @@
 package com.tacticalarena.game.window;
 
+import com.tacticalarena.game.panel.MenuPanel;
+
 import javax.swing.*;
 
 /**
  * Class MenuFrame represents the main menu window of the application.
  * This window is displayed, when the application starts.
  */
-public class MenuFrame {
+public class MenuFrame extends JFrame {
     /**
-     * Frame
+     * Panel
      */
-    private JFrame frame;
+    private MenuPanel panel;
 
     /**
      * Constructor creates and configures the main menu window.
      */
     public MenuFrame() {
-        this.frame = new JFrame("Tactical Arena – Menu");
+        setTitle("Tactical Arena – Menu");
+        this.panel = new MenuPanel(this);
+
+        add(panel);
+        setContentPane(panel);
+
+        panel.initUI();
         configureFrame();
     }
 
@@ -25,30 +33,31 @@ public class MenuFrame {
      */
     public void configureFrame() {
         // Set window size
-        frame.setSize(800, 600);
+        setSize(800, 600);
 
         // Exit application when window is closed
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         // Center the window on the screen
-        frame.setLocationRelativeTo(null);
+        setLocationRelativeTo(null);
 
         // Turns off resize option
-        frame.setResizable(false);
+        setResizable(false);
 
         // Make window visible
-        frame.setVisible(true);
+        setVisible(true);
     }
 
     // region get, set
 
-    public JFrame getFrame() {
-        return frame;
+    public MenuPanel getPanel() {
+        return panel;
     }
 
-    public void setFrame(JFrame frame) {
-        this.frame = frame;
+    public void setPanel(MenuPanel panel) {
+        this.panel = panel;
     }
+
 
     // endregion
 }
