@@ -1,12 +1,22 @@
 package com.tacticalarena.game.window;
 
+import com.tacticalarena.game.panel.GamePanel;
+
 import javax.swing.*;
+import java.awt.*;
 
 /**
  * Class GameFrame represents the main game window.
  */
 public class GameFrame extends JFrame {
+    /**
+     * Panel
+     */
+    private GamePanel gamePanel;
+
     public GameFrame() {
+        this.gamePanel = new GamePanel();
+        setContentPane(this.gamePanel);
         setTitle("Tactical Arena – InGame");
 
         // Set window size
