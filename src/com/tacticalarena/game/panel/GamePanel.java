@@ -16,6 +16,7 @@ public class GamePanel extends JPanel {
     private List<Bullet> bullets;
     private KeyHandler keyHandler;
     private boolean canShoot = true;
+    private int shootCooldown = 0;
 
     public GamePanel() {
         this.keyHandler = new KeyHandler();
@@ -27,7 +28,7 @@ public class GamePanel extends JPanel {
 
         // Initialize player
         player = new Player(100, 100);
-        enemy = new Enemy(300, 200);
+        enemy = new Enemy(700, 100);
 
         setBackground(Color.BLACK);
 
@@ -54,9 +55,9 @@ public class GamePanel extends JPanel {
     public void update() {
         player.update(keyHandler, getHeight(), getWidth());
 
-        if (keyHandler.shoot && canShoot) {
+        if (keyHandler.shoot && shootCooldown == 0) {
             bullets.add(player.shoot());
-            canShoot = false;
+            shootCooldown = 10;
         }
 
         if (!keyHandler.shoot) {
@@ -86,12 +87,24 @@ public class GamePanel extends JPanel {
         }
 
         if (enemy != null) {
-
+            if (
+                player.getX() < enemy.getX() + enemy.getWidth() &&
+                player.getX() + player.getWidth() > enemy.getX() &&
+                player.getY() < enemy.getY() + enemy.getHeight() &&
+                player.getY() + player.getHeight() > enemy.getY()
+            ) {
+                player.setHealth(player.getHealth() - enemy.getDamage());
+                shootCooldown = 30;
+            }
             if (enemy.isDead()) {
                 enemy = null;
             } else {
                 enemy.update(player);
             }
+        }
+
+        if (shootCooldown > 0) {
+            shootCooldown--;
         }
     }
 
