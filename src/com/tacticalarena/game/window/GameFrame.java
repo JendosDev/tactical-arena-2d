@@ -20,7 +20,7 @@ public class GameFrame extends JFrame {
         setTitle("Tactical Arena – InGame");
 
         // Set window size
-        setSize(800, 600);
+        setSize(1280, 720);
 
         // Center window on screen
         setLocationRelativeTo(null);
