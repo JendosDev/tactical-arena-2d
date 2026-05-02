@@ -113,6 +113,10 @@ public class Player {
         return new Bullet(bulletX, bulletY, dirX, dirY);
     }
 
+    public boolean isDead() {
+        return health <= 0;
+    }
+
     // region get, set
 
     public int getX() {
