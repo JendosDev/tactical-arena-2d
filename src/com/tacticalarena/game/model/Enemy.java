@@ -17,7 +17,7 @@ public class Enemy {
         this.width = 100;
         this.height = 100;
         this.health = 2000;
-        this.speed = 5;
+        this.speed = 2;
         this.damage = 10;
     }
 
@@ -29,11 +29,11 @@ public class Enemy {
         int dx = player.getX() - x;
         int dy = player.getY() - y;
 
-        if (Math.abs(dx) > 50) {
+        if (Math.abs(dx) > 250) {
             if (dx > 0) x += speed;
             else x -= speed;
         }
-        if (Math.abs(dy) > 50) {
+        if (Math.abs(dy) > 250) {
             if (dy > 0) y += speed;
             else y -= speed;
         }
