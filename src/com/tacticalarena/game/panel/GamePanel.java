@@ -17,6 +17,7 @@ public class GamePanel extends JPanel {
     private KeyHandler keyHandler;
     private boolean canShoot = true;
     private int shootCooldown = 0;
+    private int damageCooldown = 0;
 
     public GamePanel() {
         this.keyHandler = new KeyHandler();
@@ -53,59 +54,96 @@ public class GamePanel extends JPanel {
     }
 
     public void update() {
+
+        updatePlayer();
+        handleShooting();
+        updateBullets();
+        handleBulletCollisions();
+        updateEnemy();
+        handlePlayerDamage();
+        updateCooldowns();
+    }
+
+    private void updatePlayer() {
+        int oldX = player.getX();
+        int oldY = player.getY();
+
         player.update(keyHandler, getHeight(), getWidth());
 
+        if (enemy != null && isColliding(player, enemy)) {
+            player.setX(oldX);
+            player.setY(oldY);
+        }
+    }
+
+    private boolean isColliding(Player player, Enemy enemy) {
+        return player.getX() < enemy.getX() + enemy.getWidth() &&
+                player.getX() + player.getWidth() > enemy.getX() &&
+                player.getY() < enemy.getY() + enemy.getHeight() &&
+                player.getY() + player.getHeight() > enemy.getY();
+    }
+
+    private void handleShooting() {
         if (keyHandler.shoot && shootCooldown == 0) {
             bullets.add(player.shoot());
             shootCooldown = 10;
         }
+    }
 
-        if (!keyHandler.shoot) {
-            canShoot = true;
-        }
-
-        if (enemy != null) {
-            for (int i = 0; i < bullets.size(); i++) {
-                Bullet bullet = bullets.get(i);
-
-                if (
-                        bullet.getX() > enemy.getX() &&
-                                bullet.getX() < enemy.getX() + enemy.getWidth() &&
-                                bullet.getY() > enemy.getY() &&
-                                bullet.getY() < enemy.getY() + enemy.getHeight()
-                ) {
-                    enemy.setHealth(enemy.getHealth() - 50);
-
-                    bullets.remove(i);
-                    i--;
-                }
-            }
-        }
-
+    private void updateBullets() {
         for (Bullet bullet : bullets) {
             bullet.update();
         }
+    }
 
-        if (enemy != null) {
+    private void handleBulletCollisions() {
+        if (enemy == null) return;
+
+        for (int i = 0; i < bullets.size(); i++) {
+            Bullet bullet = bullets.get(i);
             if (
+                    bullet.getX() > enemy.getX() &&
+                    bullet.getX() < enemy.getX() + enemy.getWidth() &&
+                    bullet.getY() > enemy.getY() &&
+                    bullet.getY() < enemy.getY() + enemy.getHeight()
+            ) {
+                enemy.setHealth(enemy.getHealth() - 50);
+                bullets.remove(i);
+                i--;
+            }
+        }
+    }
+
+    private void updateEnemy() {
+        if (enemy == null) return;
+
+        if (enemy.isDead()) {
+            enemy = null;
+        } else {
+            enemy.update(player);
+        }
+    }
+
+    private void handlePlayerDamage() {
+        if (enemy == null) return;
+
+        if (
                 player.getX() < enemy.getX() + enemy.getWidth() &&
                 player.getX() + player.getWidth() > enemy.getX() &&
                 player.getY() < enemy.getY() + enemy.getHeight() &&
                 player.getY() + player.getHeight() > enemy.getY()
-            ) {
-                player.setHealth(player.getHealth() - enemy.getDamage());
-                shootCooldown = 30;
-            }
-            if (enemy.isDead()) {
-                enemy = null;
-            } else {
-                enemy.update(player);
-            }
-        }
 
-        if (shootCooldown > 0) {
-            shootCooldown--;
+        ) {
+            if (damageCooldown == 0) {
+                player.setHealth(player.getHealth() - enemy.getDamage());
+                damageCooldown = 30;
+            }
         }
+    }
+
+    private void updateCooldowns() {
+        if (shootCooldown > 0) shootCooldown--;
+        if (damageCooldown > 0) damageCooldown--;
     }
 
     public void removeBullet() {
