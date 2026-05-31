@@ -5,23 +5,22 @@ import com.tacticalarena.game.handler.KeyHandler;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-public class Player {
+public class Player extends GameObject {
     private BufferedImage currentImage;
     private BufferedImage
             upImage,
             downImage,
             rightImage,
             leftImage;
-    private int x;
-    private int y;
-    private int width;
-    private int height;
+
     private int speed;
     private int health;
     private int dirX = 0;
     private int dirY = -1;
 
     public Player(int x, int y) {
+        super(x, y, 90, 90);
+
         try {
             upImage = javax.imageio.ImageIO.read(
                     getClass().getResourceAsStream("/player-image-up-1.png")
@@ -41,17 +40,22 @@ public class Player {
             System.err.println("Error loading image: " + e.getMessage());
         }
 
-        this.x = x;
-        this.y = y;
-        this.width = 150;
-        this.height = 150;
         this.speed = 5;
         this.health = 100;
     }
 
     public void update(KeyHandler keyHandler, int panelHeight, int panelWidth) {
+        playerMovement(keyHandler);
+        loadPlayer();
 
-        // speed set
+        if (y < 0) y = 0;
+        if (x < 0) x = 0;
+
+        if (y + height > panelHeight) y = panelHeight - height;
+        if (x + width > panelWidth) x = panelWidth - width;
+    }
+
+    private void playerMovement(KeyHandler keyHandler) {
         if (keyHandler.up) {
             y -= speed;
             dirX = 0;
@@ -69,18 +73,13 @@ public class Player {
             dirX = 1;
             dirY = 0;
         }
+    }
 
+    private void loadPlayer() {
         if (dirX == 0 && dirY == -1) currentImage = upImage;
         if (dirX == 0 && dirY == 1) currentImage = downImage;
         if (dirX == -1 && dirY == 0) currentImage = leftImage;
         if (dirX == 1 && dirY == 0) currentImage = rightImage;
-
-        // clamp
-        if (y < 0) y = 0;
-        if (x < 0) x = 0;
-
-        if (y + height >  panelHeight) y = panelHeight - height;
-        if (x + width > panelWidth) x = panelWidth - width;
     }
 
     public void draw(Graphics g) {
@@ -164,7 +163,7 @@ public class Player {
     }
 
     public void setHealth(int health) {
-        this.health = health;
+        this.health = Math.max(0, health);
     }
 
     public int getDirX() {
