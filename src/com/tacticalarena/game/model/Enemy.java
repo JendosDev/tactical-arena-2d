@@ -1,22 +1,17 @@
 package com.tacticalarena.game.model;
 
+import com.tacticalarena.game.interfaces.Collidable;
+
 import java.awt.*;
 
-public class Enemy {
-    private int x;
-    private int y;
-    private int width;
-    private int height;
+public class Enemy extends GameObject implements Collidable {
     private int health;
     private int speed;
     private int damage;
 
     public Enemy(int x, int y) {
-        this.x = x;
-        this.y = y;
-        this.width = 100;
-        this.height = 100;
-        this.health = 2000;
+        super(x, y, 90, 90);
+        this.health = 1000;
         this.speed = 2;
         this.damage = 10;
     }
@@ -29,11 +24,11 @@ public class Enemy {
         int dx = player.getX() - x;
         int dy = player.getY() - y;
 
-        if (Math.abs(dx) > 250) {
+        if (Math.abs(dx) > 75) {
             if (dx > 0) x += speed;
             else x -= speed;
         }
-        if (Math.abs(dy) > 250) {
+        if (Math.abs(dy) > 75) {
             if (dy > 0) y += speed;
             else y -= speed;
         }
@@ -107,4 +102,12 @@ public class Enemy {
     }
 
     // endregion
+
+    @Override
+    public boolean isColliding(int x, int y, int width, int height) {
+        return this.x < x + width &&
+                this.x + this.width > x &&
+                this.y < y + height &&
+                this.y + this.height > y;
+    }
 }
