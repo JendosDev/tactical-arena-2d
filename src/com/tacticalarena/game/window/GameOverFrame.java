@@ -3,8 +3,15 @@ package com.tacticalarena.game.window;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * Window displayed when the player loses the game.
+ * Shows a simple "GAME OVER" message.
+ */
 public class GameOverFrame extends JFrame {
 
+    /**
+     * Creates and displays the Game Over window.
+     */
     public GameOverFrame() {
         setTitle("Game Over");
 

@@ -3,35 +3,31 @@ package com.tacticalarena.game.window;
 import com.tacticalarena.game.panel.GamePanel;
 
 import javax.swing.*;
-import java.awt.*;
 
 /**
- * Class GameFrame represents the main game window.
+ * Represents the main game window.
+ * This window contains the GamePanel where the gameplay takes place.
  */
 public class GameFrame extends JFrame {
+
     /**
-     * Panel
+     * Main game panel containing game logic and rendering.
      */
     private GamePanel gamePanel;
 
+    /**
+     * Creates and initializes the game window.
+     */
     public GameFrame() {
         this.gamePanel = new GamePanel();
+
         setContentPane(this.gamePanel);
         setTitle("Tactical Arena – InGame");
 
-        // Set window size
         setSize(1280, 720);
-
-        // Center window on screen
         setLocationRelativeTo(null);
-
-        // Disable resizing
         setResizable(false);
-
-        // Close application on exit
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        // Make window visible
         setVisible(true);
     }
 }

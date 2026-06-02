@@ -13,6 +13,11 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Main game panel of the Tactical Arena application.
+ * Handles rendering, player input, collisions,
+ * enemy behavior and overall game logic.
+ */
 public class GamePanel extends JPanel {
     private Player player;
     private List<Enemy> enemies;
@@ -22,8 +27,33 @@ public class GamePanel extends JPanel {
     private int damageCooldown = 0;
     private boolean gameOver = false;
     private int kills = 0;
+    /**
+     * Size of one map tile in pixels.
+     */
     private static final int TILE_SIZE = 100;
 
+    /**
+     * Arena map.
+     * 0 = floor
+     * 1 = wall
+     */
+    private int[][] map = {
+            {1,1,1,1,1,1,1,1,1,1,1,1},
+            {1,0,0,0,0,0,0,0,0,0,0,1},
+            {1,0,1,1,0,0,0,1,1,0,0,1},
+            {1,0,0,0,0,1,0,0,0,0,0,1},
+            {1,0,0,1,0,1,0,1,0,0,0,1},
+            {1,0,0,1,0,0,0,1,0,0,0,1},
+            {1,0,0,0,0,0,0,0,0,1,0,1},
+            {1,0,1,0,1,0,1,0,0,1,0,1},
+            {1,0,0,0,0,0,0,0,0,0,0,1},
+            {1,1,1,1,1,1,1,1,1,1,1,1}
+    };
+
+    /**
+     * Creates and initializes the game panel,
+     * player, enemies and the game loop.
+     */
     public GamePanel() {
         this.keyHandler = new KeyHandler();
         addKeyListener(keyHandler);
@@ -49,6 +79,11 @@ public class GamePanel extends JPanel {
         timer.start();
     }
 
+    /**
+     * Draws all game objects and user interface elements.
+     *
+     * @param g graphics context
+     */
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -98,6 +133,9 @@ public class GamePanel extends JPanel {
         g.fillRect(20, 20, player.getHealth() * 2, 20);
     }
 
+    /**
+     * Updates the entire game state.
+     */
     public void update() {
         if (gameOver) return;
 
@@ -118,6 +156,10 @@ public class GamePanel extends JPanel {
         }
     }
 
+    /**
+     * Updates player movement and handles collisions
+     * with walls and enemies.
+     */
     private void updatePlayer() {
         int oldX = player.getX();
         int oldY = player.getY();
@@ -149,6 +191,13 @@ public class GamePanel extends JPanel {
         }
     }
 
+    /**
+     * Checks whether the specified position
+     * contains a wall tile.
+     * @param x x coordinate
+     * @param y y coordinate
+     * @return true if the position contains a wall
+     */
     private boolean isWall(int x, int y) {
         int col = x / TILE_SIZE;
         int row = y / TILE_SIZE;
@@ -160,6 +209,9 @@ public class GamePanel extends JPanel {
         return map[row][col] == 1;
     }
 
+    /**
+     * Handles player shooting and bullet creation.
+     */
     private void handleShooting() {
         if (keyHandler.shoot && shootCooldown == 0) {
             bullets.add(player.shoot());
@@ -167,12 +219,19 @@ public class GamePanel extends JPanel {
         }
     }
 
+    /**
+     * Updates all active bullets.
+     */
     private void updateBullets() {
         for (Bullet bullet : bullets) {
             bullet.update();
         }
     }
 
+    /**
+     * Detects bullet collisions with enemies
+     * and applies damage.
+     */
     private void handleBulletCollisions() {
 
         for (Enemy enemy : enemies) {
@@ -199,6 +258,9 @@ public class GamePanel extends JPanel {
         }
     }
 
+    /**
+     * Updates all enemies and removes defeated enemies.
+     */
     private void updateEnemies() {
 
         for (int i = 0; i < enemies.size(); i++) {
@@ -215,6 +277,10 @@ public class GamePanel extends JPanel {
         }
     }
 
+    /**
+     * Applies damage to the player when an enemy
+     * is within attack range.
+     */
     private void handlePlayerDamage() {
         int range = 20;
 
@@ -259,11 +325,19 @@ public class GamePanel extends JPanel {
         }
     }
 
+    /**
+     * Updates active cooldown timers.
+     */
     private void updateCooldowns() {
         if (shootCooldown > 0) shootCooldown--;
         if (damageCooldown > 0) damageCooldown--;
     }
 
+
+
+    /**
+     * Removes bullets that leave the visible game area.
+     */
     public void removeBullet() {
         bullets.removeIf(bullet ->
                 bullet.getX() < 0 ||
@@ -272,17 +346,4 @@ public class GamePanel extends JPanel {
                         bullet.getY() > getHeight()
         );
     }
-
-    private int[][] map = {
-            {1,1,1,1,1,1,1,1,1,1,1,1},
-            {1,0,0,0,0,0,0,0,0,0,0,1},
-            {1,0,1,1,0,0,0,1,1,0,0,1},
-            {1,0,0,0,0,1,0,0,0,0,0,1},
-            {1,0,0,1,0,1,0,1,0,0,0,1},
-            {1,0,0,1,0,0,0,1,0,0,0,1},
-            {1,0,0,0,0,0,0,0,0,1,0,1},
-            {1,0,1,0,1,0,1,0,0,1,0,1},
-            {1,0,0,0,0,0,0,0,0,0,0,1},
-            {1,1,1,1,1,1,1,1,1,1,1,1}
-    };
 }

@@ -5,7 +5,15 @@ import com.tacticalarena.game.handler.KeyHandler;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
+/**
+ * Represents the player controlled by the user.
+ * Handles movement, shooting, health management
+ * and rendering of the player sprite.
+ */
 public class Player extends GameObject {
+    /**
+     * Currently displayed player sprite.
+     */
     private BufferedImage currentImage;
     private BufferedImage
             upImage,
@@ -13,11 +21,25 @@ public class Player extends GameObject {
             rightImage,
             leftImage;
 
+    /**
+     * Player movement speed.
+     */
     private int speed;
+
+    /**
+     * Current player health.
+     */
     private int health;
     private int dirX = 0;
     private int dirY = -1;
 
+    /**
+     * Creates a new player at the specified position
+     * and loads all player sprites.
+     *
+     * @param x initial X coordinate
+     * @param y initial Y coordinate
+     */
     public Player(int x, int y) {
         super(x, y, 80, 80);
 
@@ -44,6 +66,15 @@ public class Player extends GameObject {
         this.health = 100;
     }
 
+
+    /**
+     * Updates player movement, sprite direction
+     * and keeps the player inside the game area.
+     *
+     * @param keyHandler keyboard input handler
+     * @param panelHeight game panel height
+     * @param panelWidth game panel width
+     */
     public void update(KeyHandler keyHandler, int panelHeight, int panelWidth) {
         playerMovement(keyHandler);
         loadPlayer();
@@ -55,6 +86,12 @@ public class Player extends GameObject {
         if (x + width > panelWidth) x = panelWidth - width;
     }
 
+    /**
+     * Processes keyboard input and updates
+     * player position and facing direction.
+     *
+     * @param keyHandler keyboard input handler
+     */
     private void playerMovement(KeyHandler keyHandler) {
         if (keyHandler.up) {
             y -= speed;
@@ -75,6 +112,10 @@ public class Player extends GameObject {
         }
     }
 
+    /**
+     * Updates the displayed player sprite
+     * according to the current direction.
+     */
     private void loadPlayer() {
         if (dirX == 0 && dirY == -1) currentImage = upImage;
         if (dirX == 0 && dirY == 1) currentImage = downImage;
@@ -82,6 +123,11 @@ public class Player extends GameObject {
         if (dirX == 1 && dirY == 0) currentImage = rightImage;
     }
 
+    /**
+     * Draws the player on the game panel.
+     *
+     * @param g graphics context
+     */
     public void draw(Graphics g) {
         if (currentImage != null) {
             g.drawImage(currentImage, x, y, width, height, null);
@@ -91,6 +137,12 @@ public class Player extends GameObject {
         }
     }
 
+    /**
+     * Creates a bullet travelling in the
+     * direction the player is facing.
+     *
+     * @return newly created bullet
+     */
     public Bullet shoot() {
         int bulletX = x;
         int bulletY = y;
@@ -112,6 +164,11 @@ public class Player extends GameObject {
         return new Bullet(bulletX, bulletY, dirX, dirY);
     }
 
+    /**
+     * Checks whether the player has been defeated.
+     *
+     * @return true if player health is zero or lower
+     */
     public boolean isDead() {
         return health <= 0;
     }

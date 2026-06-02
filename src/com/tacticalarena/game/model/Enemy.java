@@ -4,11 +4,34 @@ import com.tacticalarena.game.interfaces.Collidable;
 
 import java.awt.*;
 
+/**
+ * Represents an enemy character in the game.
+ * The enemy follows the player and can deal damage
+ * when it gets close enough.
+ */
 public class Enemy extends GameObject implements Collidable {
+
+    /**
+     * Current enemy health.
+     */
     private int health;
+
+    /**
+     * Enemy movement speed.
+     */
     private int speed;
+
+    /**
+     * Amount of damage dealt to the player.
+     */
     private int damage;
 
+    /**
+     * Creates a new enemy at the specified position.
+     *
+     * @param x initial X coordinate
+     * @param y initial Y coordinate
+     */
     public Enemy(int x, int y) {
         super(x, y, 90, 90);
         this.health = 1000;
@@ -16,6 +39,11 @@ public class Enemy extends GameObject implements Collidable {
         this.damage = 10;
     }
 
+    /**
+     * Updates enemy movement towards the player.
+     *
+     * @param player target player
+     */
     public void update(Player player) {
         if (health <= 0) {
             health = 0;
@@ -28,17 +56,28 @@ public class Enemy extends GameObject implements Collidable {
             if (dx > 0) x += speed;
             else x -= speed;
         }
+
         if (Math.abs(dy) > 100) {
             if (dy > 0) y += speed;
             else y -= speed;
         }
     }
 
+    /**
+     * Draws the enemy on the game panel.
+     *
+     * @param g graphics context
+     */
     public void draw(Graphics g) {
         g.setColor(Color.RED);
         g.fillRect(x, y, width, height);
     }
 
+    /**
+     * Checks whether the enemy has been defeated.
+     *
+     * @return true if health is zero or below
+     */
     public boolean isDead() {
         return health <= 0;
     }
@@ -103,6 +142,15 @@ public class Enemy extends GameObject implements Collidable {
 
     // endregion
 
+    /**
+     * Checks collision between this enemy and another rectangular object.
+     *
+     * @param x object's X coordinate
+     * @param y object's Y coordinate
+     * @param width object's width
+     * @param height object's height
+     * @return true if the objects overlap
+     */
     @Override
     public boolean isColliding(int x, int y, int width, int height) {
         return this.x < x + width &&

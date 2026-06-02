@@ -3,13 +3,33 @@ package com.tacticalarena.game.handler;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
+/**
+ * Handles keyboard input for player movement and shooting.
+ * Stores the current state of pressed keys.
+ */
 public class KeyHandler extends KeyAdapter {
+
+    /**
+     * Movement key states.
+     */
     public boolean up, down, left, right;
+
+    /**
+     * Shooting key state.
+     */
     public boolean shoot;
 
+    /**
+     * Creates a new keyboard input handler.
+     */
     public KeyHandler() {
     }
 
+    /**
+     * Sets key states when a key is pressed.
+     *
+     * @param e keyboard event
+     */
     @Override
     public void keyPressed(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_W) up = true;
@@ -19,6 +39,11 @@ public class KeyHandler extends KeyAdapter {
         if (e.getKeyCode() == KeyEvent.VK_SPACE) shoot = true;
     }
 
+    /**
+     * Resets key states when a key is released.
+     *
+     * @param e keyboard event
+     */
     @Override
     public void keyReleased(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_W) up = false;
