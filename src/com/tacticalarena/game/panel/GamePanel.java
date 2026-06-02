@@ -38,8 +38,6 @@ public class GamePanel extends JPanel {
 
         enemies.add(new Enemy(700, 100));
 
-        enemies.add(new Enemy(900, 300));
-
         enemies.add(new Enemy(500, 500));
 
         setBackground(Color.BLACK);
@@ -224,9 +222,9 @@ public class GamePanel extends JPanel {
 
             if (
                     player.getX() < enemy.getX() + enemy.getWidth() + range &&
-                            player.getX() + player.getWidth() > enemy.getX() - range &&
-                            player.getY() < enemy.getY() + enemy.getHeight() + range &&
-                            player.getY() + player.getHeight() > enemy.getY() - range
+                    player.getX() + player.getWidth() > enemy.getX() - range &&
+                    player.getY() < enemy.getY() + enemy.getHeight() + range &&
+                    player.getY() + player.getHeight() > enemy.getY() - range
             ) {
 
                 if (damageCooldown == 0) {
@@ -237,7 +235,7 @@ public class GamePanel extends JPanel {
 
                     damageCooldown = 30;
 
-                    int push = 10;
+                    int push = 0;
 
                     double dx = player.getX() - enemy.getX();
                     double dy = player.getY() - enemy.getY();

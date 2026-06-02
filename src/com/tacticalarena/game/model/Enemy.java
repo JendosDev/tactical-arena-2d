@@ -12,7 +12,7 @@ public class Enemy extends GameObject implements Collidable {
     public Enemy(int x, int y) {
         super(x, y, 90, 90);
         this.health = 1000;
-        this.speed = 2;
+        this.speed = 1;
         this.damage = 10;
     }
 
@@ -24,11 +24,11 @@ public class Enemy extends GameObject implements Collidable {
         int dx = player.getX() - x;
         int dy = player.getY() - y;
 
-        if (Math.abs(dx) > 75) {
+        if (Math.abs(dx) > 100) {
             if (dx > 0) x += speed;
             else x -= speed;
         }
-        if (Math.abs(dy) > 75) {
+        if (Math.abs(dy) > 100) {
             if (dy > 0) y += speed;
             else y -= speed;
         }

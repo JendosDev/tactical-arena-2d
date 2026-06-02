@@ -19,7 +19,7 @@ public class Player extends GameObject {
     private int dirY = -1;
 
     public Player(int x, int y) {
-        super(x, y, 90, 90);
+        super(x, y, 80, 80);
 
         try {
             upImage = javax.imageio.ImageIO.read(
