@@ -7,6 +7,7 @@ import com.tacticalarena.game.model.Bullet;
 import com.tacticalarena.game.model.Enemy;
 import com.tacticalarena.game.model.Player;
 import com.tacticalarena.game.window.GameOverFrame;
+import com.tacticalarena.game.window.VictoryFrame;
 
 import javax.swing.*;
 import java.awt.*;
@@ -27,6 +28,7 @@ public class GamePanel extends JPanel {
     private int damageCooldown = 0;
     private boolean gameOver = false;
     private int kills = 0;
+    private boolean victory = false;
     /**
      * Size of one map tile in pixels.
      */
@@ -148,7 +150,21 @@ public class GamePanel extends JPanel {
         handlePlayerDamage();
         updateCooldowns();
 
-        if (player.isDead()) {
+        if (enemies.isEmpty() && !victory) {
+
+            victory = true;
+
+            new VictoryFrame();
+
+            Window window = SwingUtilities.getWindowAncestor(this);
+
+            window.dispose();
+
+        }
+
+        if (player.isDead() && !gameOver) {
+            gameOver = true;
+
             new GameOverFrame();
 
             Window window = SwingUtilities.getWindowAncestor(this);
@@ -332,8 +348,6 @@ public class GamePanel extends JPanel {
         if (shootCooldown > 0) shootCooldown--;
         if (damageCooldown > 0) damageCooldown--;
     }
-
-
 
     /**
      * Removes bullets that leave the visible game area.
